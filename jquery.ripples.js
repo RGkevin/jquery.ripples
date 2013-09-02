@@ -1,7 +1,8 @@
-/* Author: Kevin Lopez @RGkevin
+/*!
+* Author: Kevin Lopez @RGkevin
 
 */
-
+'use_stric';
 (function($) {
 
 	$.fn.ripples = function(options) {
@@ -10,7 +11,6 @@
 			// set defaults
 			delay 	  : 30, // speed of ripples
 			riprad 	  : 3,
-			mapind : '',
 			onmousemove : true,
 			randomripples : true,
 			frecuency : 700, // interval for random ripples
@@ -21,12 +21,13 @@
 
 		return this.each(function(){
 
-
 			var $this = $(this),
 			canvas    = document.createElement('canvas'),
 			image     = $this,
 			width     = settings.width ? settings.width : this.width,
-			height    = settings.height ? settings.height : this.height;
+			height    = settings.height ? settings.height : this.height,
+			obj,
+			ctx;
 
 			// creating canvas
 
@@ -34,15 +35,18 @@
 			canvas.height = height;
 			canvas.id = settings.id ? settings.id : '';
 			image.after(canvas);
-			var ctx = $(canvas)[0].getContext('2d');
+			ctx = $(canvas)[0].getContext('2d');
 
-			// drawing image
-			image.remove(); // hide original image
-			ctx.drawImage(this, 0, 0);
+
 
 			// effect settings
-			var texture = ctx.getImageData(0, 0, width, height),
-			ripple      = ctx.getImageData(0, 0, width, height),
+			// console.log( 'width', width );
+			image.remove();
+			// console.log(this);
+			ctx.drawImage(this, 0, 0);
+			// console.log( 'cctx', ctx );
+			var texture = ctx.getImageData( 0, 0, width, height ),
+			ripple      = ctx.getImageData( 0, 0, width, height ),
 			size        = width * (height + 2) * 2,
 			oldind      = width,
 			newind      = width * (height + 3),
@@ -52,8 +56,11 @@
 			half_height = height >> 1,
 			ripplemap   = [],
 			last_map    = [];
+			// drawing image
+			console.log(this);
+			// image.remove(); // hide original image
 
-			for (var i = 0; i < size; i++) {
+			for ( var i = 0; i < size; i++ ) {
 				last_map[i] = ripplemap[i] = 0;
 			}
 
